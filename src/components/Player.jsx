@@ -65,73 +65,97 @@ function Player() {
     let defaultConfig;
     let config = Data[0][0];
 
-    config.events.onMute = function onMute() {
+    config.events.onMute = function onMute(e) {
         document.getElementById('unmute').style.display = '';
         document.getElementById('mute').style.display = 'none';
+        const data = JSON.stringify(e.data);
+        log(` onMute:${data} \n \n`);
     };
-    config.events.onUnmute = function onUnmute() {
+    config.events.onUnmute = function onUnmute(e) {
         document.getElementById('unmute').style.display = 'none';
         document.getElementById('mute').style.display = '';
+        const data = JSON.stringify(e.data);
+        log(` onUnmute:${data} \n \n`);
     };
     config.events.onVolumeChange = function onVolumeChange(event) {
         console.log(`Volume: ${event.data.volume}`);
+        const data = JSON.stringify(event.data);
+        log(` onVolumeChange:${data} \n \n`);
     };
-    config.events.onDestroy = function onDestroy() {
+    config.events.onDestroy = function onDestroy(e) {
         document.getElementById('status').innerText = 'destroy';
+        const data = JSON.stringify(e.data);
+        log(` onDestroy:${data} \n \n`);
     };
     config.events.onReady = function onReady(e) {
         document.getElementById('status').innerText = 'ready';
-        const { source } = e.data.config;
+        config = e.data.config;
+        const { source } = config;
         updateStreamQualityWrapper(source.entries[+source.startIndex]);
+        const data = JSON.stringify(e.data);
+        log(` onReady:${data} \n \n`);
     };
     config.events.onSwitchStreamInit = function onSwitchStreamInit(e) {
         handleSwitchStreamInit(e);
         if (e.data.rule !== 'none') {
             document.getElementById('automatic').checked = true;
         }
+        const data = JSON.stringify(e.data);
+        log(` onSwitchStreamInit:${data} \n \n`);
     };
-    config.events.onStreamInfoUpdate = function onStreamInfoUpdate() {};
+    config.events.onStreamInfoUpdate = function onStreamInfoUpdate(e) {
+        const data = JSON.stringify(e.data);
+        log(` onStreamInfoUpdate:${data} \n \n`);
+    };
 
     config.events.onStreamInfo = function onStreamInfo(event) {
         const data = JSON.stringify(event.data.streamInfo);
-        document.getElementById('infoLog').innerHTML = `onStreamInfo:${data} \n \n`;
+        log(` onStreamInfo:${data} \n \n`);
     };
     config.events.onSwitchStreamSuccess = function onSwitchStreamSuccess(event) {
         const data = JSON.stringify(event.data);
-        document.getElementById('switchLog').innerHTML = `onSwitchStreamSuccess:${data} \n \n`;
+        log(` onSwitchStreamSuccess:${data} \n \n`);
         if (event.data.rule !== 'none') {
             document.getElementById('automatic').checked = true;
         }
     };
     config.events.onServerInfo = function onServerInfo(event) {
         const data = JSON.stringify(event.data.serverInfo);
-        document.getElementById('serverLog').innerHTML = `onServerInfo:${data} \n \n`;
+        log(` onServerInfo:${data} \n \n`);
     };
-    config.events.onPlay = function onPlay() {
+    config.events.onPlay = function onPlay(e) {
         document.getElementById('status').innerText = 'playing';
         document.getElementById('pause').style.display = '';
         document.getElementById('play').style.display = 'none';
+        const data = JSON.stringify(e.data);
+        log(` onPlay:${data} \n \n`);
     };
     config.events.onPause = function onPause(e) {
         const reason = e.data.reason !== 'normal' ? ' ($reason$)'.replace('$reason$', e.data.reason) : '';
         document.getElementById('status').innerText = `paused${reason}`;
         document.getElementById('pause').style.display = 'none';
         document.getElementById('play').style.display = '';
+        const data = JSON.stringify(e.data);
+        log(` onPause:${data} \n \n`);
     };
-    config.events.onLoading = function onLoading() {
+    config.events.onLoading = function onLoading(e) {
         document.getElementById('status').innerText = 'loading';
         document.getElementById('play').style.display = 'none';
         document.getElementById('pause').style.display = '';
+        const data = JSON.stringify(e.data);
+        log(` onLoading:${data} \n \n`);
     };
-    config.events.onStartBuffering = function onStartBuffering() {
+    config.events.onStartBuffering = function onStartBuffering(e) {
         buffering.start = new Date();
         setTimeout(() => {
             if (buffering.start) {
                 document.getElementById('status').innerText = 'buffering';
             }
         }, 2000);
+        const data = JSON.stringify(e.data);
+        log(` onStartBuffering:${data} \n \n`);
     };
-    config.events.onStopBuffering = function onStopBuffering() {
+    config.events.onStopBuffering = function onStopBuffering(e) {
         buffering.stop = new Date();
         if (buffering.start) {
             const duration = Math.abs(buffering.stop - buffering.start);
@@ -142,6 +166,8 @@ function Player() {
             buffering.start = 0;
         }
         document.getElementById('status').innerText = 'playing';
+        const data = JSON.stringify(e.data);
+        log(` onStopBuffering:${data} \n \n`);
     };
 
     config.events.onStats = function onStats(event) {
@@ -202,7 +228,7 @@ function Player() {
     function initPlayer() {
         player = new window.NanoPlayer('playerDiv');
         const playerVersion = player.version;
-        document.getElementById('demo-version').innerText = playerVersion;
+        document.getElementById('demo-version').innerText = `Version ${playerVersion}`;
         player.on('StreamInfo', (e) => {
             const { streamname } = e.data.streamInfo.rtmp;
             console.log(streamname);
@@ -419,7 +445,7 @@ function Player() {
                     document.getElementById('streamName').innerHTML = streams[i].h5live.rtmp.streamname;
                     // add streamname
                     const labelStreamname = document.createElement('span');
-                    if(streams[i].label !== '') {
+                    if(streams[i].label !== '' && streams[i].label !== undefined) {
                         labelStreamname.innerHTML = streams[i].label;
                     }
                     else{
@@ -432,15 +458,15 @@ function Player() {
                     // add resolution
                     if (streamInfo.videoInfo) {
                         const resolution =
-                                streamInfo.videoInfo.width && streamInfo.videoInfo.height
-                                    ? `${streamInfo.videoInfo.width}x${streamInfo.videoInfo.height}`
-                                    : 'N/A';
+                                    streamInfo.videoInfo.width && streamInfo.videoInfo.height
+                                        ? `${streamInfo.videoInfo.width}x${streamInfo.videoInfo.height}`
+                                        : 'N/A';
                         document.getElementById('resolution').innerHTML = resolution;
                     }
                 }
                 else {
                     const labelStreamname = document.createElement('span');
-                    if(streams[i].label !== '') {
+                    if(streams[i].label !== '' && streams[i].label !== undefined) {
                         labelStreamname.innerHTML = streams[i].label;
                     }
                     else{
@@ -522,6 +548,16 @@ function Player() {
             x.style.display = 'none';
             document.getElementById('toggleButton').innerText = 'Show More Statistics';
         }
+    }
+
+    function log(event) {
+        const currentTime = new Date().toLocaleTimeString();
+        const text = currentTime + event;
+        const newNode = document.createElement('span');
+        const textNode = document.createTextNode(text);
+        newNode.appendChild(textNode);
+        const list = document.getElementById('log');
+        list.insertBefore(newNode, list.children[0]);
     }
 
     useEffect(() => {
@@ -721,11 +757,8 @@ function Player() {
                     <Code>
                         <Snippet />
                     </Code>
-                    <Log>
+                    <Log id='log'>
                         <Hr style={{ 'border': '1px dotted #ebebeb' }} />
-                        <p id="infoLog" />
-                        <p id="switchLog" />
-                        <p id="serverLog" />
                     </Log>
                 </CodeWrapper>
             </Wrapper>

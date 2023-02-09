@@ -218,6 +218,7 @@ export const Log = styled.div`
     white-space: -o-pre-wrap;
     word-wrap: break-word;
     overflow: auto;
+    max-height: 820px;
 `;
 
 export const Featured = styled.div`

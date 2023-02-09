@@ -1,53 +1,25 @@
-const streamNames = ['HX26g-NRbx9', 'HX26g-uVn3M', 'HX26g-VbAxm'];
 const Data = [
     [
         {
             'source': {
-                'defaults': {
-                    'service': 'bintu'
+                'group': {
+                    'id'           : '6144a573-d337-4e7c-a7bb-845e08e5f962',
+                    'apiurl'       : 'https://bintu-dev-k8s.nanocosmos.de',
+                    'startQuality' : 'medium-low'
                 },
-                'entries': [
-                    {
-                        'index'  : 0,
-                        'label'  : 'High',
-                        'h5live' : {
-                            'rtmp': {
-                                'streamname': streamNames[0]
-                            }
-                        }
-                    },
-                    {
-                        'index'  : 1,
-                        'label'  : 'Medium',
-                        'h5live' : {
-                            'rtmp': {
-                                'streamname': streamNames[1]
-                            }
-                        }
-                    },
-                    {
-                        'index'  : 2,
-                        'label'  : 'Low',
-                        'h5live' : {
-                            'rtmp': {
-                                'streamname': streamNames[2]
-                            }
-                        }
-                    }
-                ],
-                'options': {
+                'startIndex' : 0,
+                'options'    : {
                     'adaption': {
-                        'rule': 'deviationOfMean2'
+                        'rule': 'deviationOfMean2' // enable ABR
                     },
                     'switch': {
                         'method'       : 'server',
                         'pauseOnError' : false,
                         'forcePlay'    : true,
                         'fastStart'    : false,
-                        'timeout'      : 10
+                        'timeout'      : 10,
                     }
                 },
-                'startIndex': 2
             },
             'playback': {
                 'autoplay'           : true,
@@ -60,9 +32,7 @@ const Data = [
                 'width'                : 'auto',
                 'height'               : 'auto'
             },
-            'events': {
-                'onMute': true
-            }
+            'events': {}
         }
     ]
 ];
