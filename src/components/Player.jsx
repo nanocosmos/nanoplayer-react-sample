@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
-import { Fullscreen, Pause, PlayArrow, VolumeOff, VolumeUp } from '@material-ui/icons';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import RotateLeftSharpIcon from '@mui/icons-material/RotateLeftSharp';
 import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 import GraphicEqIcon from '@mui/icons-material/GraphicEq';
@@ -580,16 +584,16 @@ function Player() {
                         <ControlWrapper>
                             <ControlLeft>
                                 <Button onClick={play} id="play" margin="0.7em">
-                                    <PlayArrow />
+                                    <PlayArrowIcon />
                                 </Button>
                                 <Button onClick={pause} id="pause" margin="0.7em">
-                                    <Pause />
+                                    <PauseIcon />
                                 </Button>
                                 <Button onClick={unMute} id="unmute" margin="0.7em" style={{ 'display': '' }}>
-                                    <VolumeOff />
+                                    <VolumeOffIcon />
                                 </Button>
                                 <Button onClick={mute} id="mute" margin="0.7em" style={{ 'display': 'none' }}>
-                                    <VolumeUp />
+                                    <VolumeUpIcon />
                                 </Button>
                                 <Input
                                     onInput={(e) => setVolume(null, e.target.value)}
@@ -605,7 +609,7 @@ function Player() {
                                     <RotateLeftSharpIcon />
                                 </Button>
                                 <Button onClick={fullScreen}>
-                                    <Fullscreen />
+                                    <FullscreenIcon />
                                 </Button>
                             </ControlRight>
                         </ControlWrapper>
