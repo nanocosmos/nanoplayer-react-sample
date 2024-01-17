@@ -3,8 +3,8 @@ const Data = [
         {
             'source': {
                 'group': {
-                    'id'           : '6144a573-d337-4e7c-a7bb-845e08e5f962',
-                    'apiurl'       : 'https://bintu-dev-k8s.nanocosmos.de',
+                    'id'           : '457689d7-d0c1-45b6-8824-1ba7a02a9c51',
+                    'apiurl'       : 'https://bintu.nanocosmos.de',
                     'startQuality' : 'medium-low'
                 },
                 'startIndex' : 0,
